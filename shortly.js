@@ -2,6 +2,7 @@ var express = require('express');
 var util = require('./lib/utility');
 var partials = require('express-partials');
 var bodyParser = require('body-parser');
+var session = require('express-session')
 
 
 var db = require('./app/config');
@@ -23,24 +24,39 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 
 
-app.get('/', 
+
+app.get('/',
+function(req, res) {
+  // console.log("LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL" , req.session);
+  res.render('index');
+});
+//console.log(session);
+
+app.get('/login',function(req,res){
+
+    res.render('login');
+});
+
+app.get('/logout',function(req,res){
+  // console.log(req.session);
+  //   req.session.destroy();
+    res.redirect('/login');
+});
+
+app.get('/create',
 function(req, res) {
   res.render('index');
 });
 
-app.get('/create', 
-function(req, res) {
-  res.render('index');
-});
-
-app.get('/links', 
+app.get('/links',
 function(req, res) {
   Links.reset().fetch().then(function(links) {
+    console.log("herrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrre",links);
     res.send(200, links.models);
   });
 });
 
-app.post('/links', 
+app.post('/links',
 function(req, res) {
   var uri = req.body.url;
 
@@ -64,6 +80,7 @@ function(req, res) {
           title: title,
           base_url: req.headers.origin
         });
+        console.log(title)
 
         link.save().then(function(newLink) {
           Links.add(newLink);
@@ -77,6 +94,42 @@ function(req, res) {
 /************************************************************/
 // Write your authentication routes here
 /************************************************************/
+
+// var checkLogin = function(req){
+//   if(req.session)
+
+// };
+//
+// app.get('/signup', function(req,res){
+
+//   res.render('signup',{local:{}});
+//   console.log("here",req.body)
+
+// });
+
+// app.get('/signup', function(req,res){
+
+//   res.render('signup',{local:{}});
+//   console.log("here",req.body)
+
+// })
+
+// app.get('/signup',function(req,res){
+
+//    if(req.body.username && req.body.password){
+//     req.body.username = req.body.username.toUpperCase();
+//     new User({'username': req.body.username})
+//         .fetch()
+//         .then(function(user){
+//         util.createSession()
+
+
+//         })
+
+
+//    }
+
+// })
 
 
 

@@ -34,16 +34,17 @@ describe('', function() {
         };
       });
 
+
     // delete user Svnh from db so it can be created later for the test
     db.knex('users')
       .where('username', '=', 'Svnh')
       .del()
       .catch(function(error) {
         // uncomment when writing authentication tests
-        // throw {
-        //   type: 'DatabaseError',
-        //   message: 'Failed to create test setup data'
-        // };
+        throw {
+          type: 'DatabaseError',
+          message: 'Failed to create test setup data'
+        };
       });
 
     // delete user Phillip from db so it can be created later for the test
@@ -61,9 +62,12 @@ describe('', function() {
 
   describe('Link creation:', function(){
 
+
+
     var requestWithSession = request.defaults({jar: true});
 
-    xbeforeEach(function(done){      // create a user that we can then log-in with
+    beforeEach(function(done){      // create a user that we can then log-in with
+
       new User({
           'username': 'Phillip',
           'password': 'Phillip'
@@ -84,7 +88,8 @@ describe('', function() {
       });
     });
 
-    it('Only shortens valid urls, returning a 404 - Not found for invalid urls', function(done) {
+
+    xit('Only shortens valid urls, returning a 404 - Not found for invalid urls', function(done) {
       var options = {
         'method': 'POST',
         'uri': 'http://127.0.0.1:4568/links',
@@ -101,6 +106,7 @@ describe('', function() {
     });
 
     describe('Shortening links:', function(){
+
 
       var options = {
         'method': 'POST',
@@ -212,7 +218,7 @@ describe('', function() {
 
   }); // 'Link creation'
 
-  xdescribe('Priviledged Access:', function(){
+  describe('Priviledged Access:', function(){
 
     it('Redirects to login page if a user tries to access the main page and is not signed in', function(done) {
       request('http://127.0.0.1:4568/', function(error, res, body) {
@@ -237,7 +243,7 @@ describe('', function() {
 
   }); // 'Priviledged Access'
 
-  xdescribe('Account Creation:', function(){
+  describe('Account Creation:', function(){
 
     it('Signup creates a user record', function(done) {
       var options = {
@@ -285,7 +291,7 @@ describe('', function() {
 
   }); // 'Account Creation'
 
-  xdescribe('Account Login:', function(){
+  describe('Account Login:', function(){
 
     var requestWithSession = request.defaults({jar: true});
 
